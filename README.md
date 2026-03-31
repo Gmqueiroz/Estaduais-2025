@@ -1,5 +1,4 @@
 # Estaduais-2025
-Repositório onde deixarei registrado o processo de coleta de dados dos estaduais de 2025
 
 Nos últimos meses, explorei alguns sites mais conhecidos e outros menos populares justamente com esse objetivo, mas enfrentei certa dificuldade. O FBref, que costuma ser bastante recomendado em fóruns pela gratuidade e possibilidade de scraping, alterou sua interface e adicionou bloqueios que dificultaram a exportação na minha exploração inicial. Sites como O Gol, API Futebol e Base de Dados surgiram como alternativas; porém, o portal O Gol foi o único dos três que ofereceu simultaneamente gratuidade e dados dos campeonatos estaduais. Lá, encontrei informações de todos os estaduais, com tabelas estatísticas variadas cobrindo gols, assistências e dados de utilização. Ainda assim, há limitações relevantes: não existe botão de exportação nem API, apenas tabelas paginadas. Além disso, informações como jogador, time, idade e posição exigem extração manual, time a time, o que torna o processo pouco viável. Por isso, mantive a busca por outras soluções.
 
