@@ -21,6 +21,7 @@ Para facilitar a obtenção das URLs dos times, reutilizei a função `tm_league
 Para isso, utilizei novamente auxílio de LLMs, que geraram um script capaz de substituir o trecho “startseite” por “leistungsdaten” nas URLs e adicionar, ao final, a chave correspondente à competição. No caso do Campeonato Paranaense, por exemplo, o sufixo utilizado foi “/reldata/BRPR%262024/plus/1”. Após aplicar esse padrão para cada estadual, construí uma lista consolidada com todas as URLs dos times.
 
 Por fim, ao executar a função adaptada `tm_squad_stats_detailed` utilizando essa lista como entrada, consegui consolidar todos os dados em um único DataFrame e, posteriormente, exportá-los para um único arquivo CSV. Esse arquivo está no repositório limpo, contendo as divisões dos times e seus respectivos estaduais.
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Esse registro é parte de um mini projeto pessoal desenvolvido para praticar minha capacidade de resolução de problemas e para exercitar, mesmo com auxilio, tecnicas de extração de dados da Web. Também, a partir desse data-set, apliquei técnicas de limpeza e adequação de dados para bancos relacionais e utilizei conhecimentos de linguagem SQL para análise de dados.
