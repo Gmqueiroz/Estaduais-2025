@@ -1,27 +1,78 @@
-# Estaduais-2025 - Identificação de fontes, testes e extração de Dados #
+# Estaduais 2025
 
-Nos últimos meses, explorei alguns sites com o objetivo de extrair dados sobre campeonatos e jogadores, mas enfrentei certa dificuldade. O FBref, que costuma ser bastante recomendado em fóruns pela gratuidade e possibilidade de scraping, alterou sua interface e adicionou bloqueios que dificultaram a exportação com técnicas simples de Webscraping. Sites como O Gol, API Futebol e Base de Dados surgiram como alternativas; porém, o portal O Gol foi o único dos três que ofereceu simultaneamente gratuidade e dados dos campeonatos estaduais, que é o meu foco nesse projeto. Lá, encontrei informações de todos os estaduais, com tabelas estatísticas variadas cobrindo gols, assistências e dados de utilização. Ainda assim, há limitações relevantes: não existe botão de exportação nem API, apenas tabelas paginadas. Além disso, informações como jogador, time, idade e posição exigem extração manual, time a time, o que torna o processo pouco viável. Por isso, mantive a busca por outras soluções.
+Projeto voltado à extração, tratamento e análise de dados dos principais campeonatos estaduais do futebol brasileiro em 2025.
 
-O site Transfermarkt surgiu como uma opção promissora, com dados mais completos e detalhados e, aparentemente, maior abertura para scraping, principalmente pela consistência de suas tabelas. Para testar essa possibilidade, solicitei ao ChatGPT a geração de um script em Python utilizando pandas e BeautifulSoup para extrair os dados desejados. Inicialmente, o código era bastante complexo, utilizando chaves de campeonatos e lidando com paginação. Ao rodar sem adaptações, identifiquei erros relacionados às chaves e à estrutura das URLs, que corrigi, mas os problemas persistiram.
+## Objetivo
 
-Decidi então simplificar a abordagem, focando em uma página específica com os dados desejados. Mesmo assim, o código retornado continuava preparado para lidar com paginação. Nos testes, observei que todas as páginas retornavam exatamente 200 linhas e que os links de navegação levavam ao mesmo conteúdo, indicando que a paginação ocorria apenas no front-end. Isso sugeriu que o scraping poderia ser feito diretamente a partir de uma única URL padrão, o que foi confirmado após nova adaptação do código.
+- Praticar extração de dados oriundos da web;
+- Aplicar técnicas de limpeza e análise de dados em SQL;
+- Construir rankings e métricas para avaliação de jogadores sub-21.
 
-Durante os testes, utilizei impressões das primeiras linhas para validar a estrutura dos dados, mas enfrentei diversos problemas: colunas de time vazias, colunas com nacionalidade no lugar do clube, bloqueios de requisição e, principalmente, inconsistências na tabela em relação ao que eu precisava. Por isso, decidi migrar para a página de artilharia (top scorers), que oferecia um conjunto mais adequado de informações.
+## Stack
 
-Antes de adaptar o código para essa nova página, busquei referências em fóruns sobre como outras pessoas estavam extraindo dados do Transfermarkt. Foi então que encontrei a biblioteca worldfootballR, em R, desenvolvida especificamente para extração de dados de sites como FBref e Transfermarkt. As funções cobrem uma ampla variedade de dados e permitem análises mais profundas; concentrei meus testes apenas nas funções voltadas ao Transfermarkt.
+- R (`worldfootballR`)
+- Excel
+- MySQL
+- Power BI
 
-De forma geral, as funções são otimizadas para ligas principais e para estatísticas agregadas de temporada, o que inicialmente parecia limitado para o meu caso. No entanto, ao testar a função de extração de dados de temporada com a URL de um time já filtrada para um campeonato estadual, obtive dados praticamente completos no formato desejado — com exceção das assistências.
+## Pipeline do projeto
 
-Como esse é um dado essencial para o projeto, precisei buscar uma alternativa. A solução veio após análise da documentação da biblioteca: localizei a função responsável pela extração e a adaptei para trabalhar com outra página, especificamente a de estatísticas detalhadas dos jogadores, filtrada para o ano desejado do estadual. Essa adaptação permitiu incluir a coluna de assistências. Além disso, corrigi a coluna “League”, que na função original não retornava corretamente times fora das Séries A e B do Brasil — no caso do Paulistão, isso excluía 6 dos 17 participantes, o que contrariava o objetivo de incluir todos os jogadores sub-22.
+- Exploração de diferentes fontes públicas de dados esportivos;
+- Extração automatizada de dados do Transfermarkt;
+- Adaptação de funções da biblioteca `worldfootballR` para incluir estatísticas detalhadas;
+- Consolidação dos dados dos estaduais Paulista, Carioca, Mineiro, Gaúcho e Paranaense;
+- Limpeza, padronização e tratamento dos dados para análise;
+- Criação de queries SQL para ranking e segmentação dos jogadores;
+- Construção de medidas e visualizações no Power BI.
 
-Após diversos testes e ajustes, cheguei a uma versão da função que retorna todos os dados necessários. Restava apenas aplicá-la aos cinco campeonatos estaduais e aos respectivos elencos.
+## Limitações da base
 
-Para facilitar a obtenção das URLs dos times, reutilizei a função `tm_league_team_urls`, que permite indicar o ano e a liga para extrair os links das equipes participantes. A adaptação consistiu em utilizar o ano de 2024 (para capturar a temporada 2024/2025, equivalente ao recorte de 2025) e fornecer diretamente a URL do campeonato estadual correspondente. Isso funcionou parcialmente, pois as URLs retornavam dados agregados do ano. Foi então necessário transformá-las para apontar à página de estatísticas detalhadas da competição específica.
+A base de dados possui foco principalmente em estatísticas ofensivas, com métricas como gols, assistências, minutos jogados e participações em partidas. Isso limita análises mais profundas para posições defensivas, já que não há dados detalhados de ações sem bola, desarmes, interceptações ou métricas avançadas de desempenho.
 
-Para isso, utilizei novamente auxílio de LLMs, que geraram um script capaz de substituir o trecho “startseite” por “leistungsdaten” nas URLs e adicionar, ao final, a chave correspondente à competição. No caso do Campeonato Paranaense, por exemplo, o sufixo utilizado foi “/reldata/BRPR%262024/plus/1”. Após aplicar esse padrão para cada estadual, construí uma lista consolidada com todas as URLs dos times.
+Por conta disso, a avaliação de jogadores defensivos foi baseada principalmente em relevância dentro da equipe, utilizando critérios como minutos jogados, média de minutos e frequência como titular.
 
-Por fim, ao executar a função adaptada `tm_squad_stats_detailed` utilizando essa lista como entrada, consegui consolidar todos os dados em um único DataFrame e, posteriormente, exportá-los para um único arquivo CSV. Esse arquivo está no repositório limpo, contendo as divisões dos times e seus respectivos estaduais.
+## Principais análises
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- Ranking de jogadores sub-21 por faixa do campo;
+- Métricas ponderadas de participação ofensiva por 90 minutos;
+- Normalização de indicadores para reduzir distorções causadas por volume de minutos;
+- Segmentação entre ataque, meio e defesa utilizando SQL.
 
-Esse registro é parte de um mini projeto pessoal desenvolvido para praticar minha capacidade de resolução de problemas e para exercitar, mesmo com auxilio, tecnicas de extração de dados da Web. Também, a partir desse data-set, apliquei técnicas de limpeza e adequação de dados para bancos relacionais e utilizei conhecimentos de linguagem SQL para análise de dados.
+## Técnicas utilizadas em SQL
+
+- CTEs
+- `CASE WHEN`
+- `RANK()`
+- `PARTITION BY`
+- Agregações
+- Normalização de métricas
+- Filtros por idade e minutagem
+
+## Estrutura do projeto
+
+```text
+Estaduais-2025/
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+├── sql/
+│   ├── ranking_sub21.sql
+│   └── limpeza_dados.sql
+│
+├── pbix/
+│   └── estaduais_2025.pbix
+│
+├── docs/
+│   └── metodologia.md
+│
+└── README.md
+```
+
+## Próximos passos
+
+- Ampliação das análises para todos os jogadores;
+- Inclusão de novas métricas e variáveis;
+- Evolução da modelagem dos dados;
+- Expansão das análises visuais no Power BI.
