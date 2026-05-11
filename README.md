@@ -23,7 +23,6 @@ Projeto voltado à extração, tratamento e análise de dados dos principais cam
 - Consolidação dos dados dos estaduais Paulista, Carioca, Mineiro, Gaúcho e Paranaense;
 - Limpeza, padronização e tratamento dos dados para análise;
 - Criação de queries SQL para ranking e segmentação dos jogadores;
-- Construção de medidas e visualizações no Power BI.
 
 ## Limitações da base
 
@@ -48,31 +47,9 @@ Por conta disso, a avaliação de jogadores defensivos foi baseada principalment
 - Normalização de métricas
 - Filtros por idade e minutagem
 
-## Estrutura do projeto
 
-```text
-Estaduais-2025/
-│
-├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── sql/
-│   ├── ranking_sub21.sql
-│   └── limpeza_dados.sql
-│
-├── pbix/
-│   └── estaduais_2025.pbix
-│
-├── docs/
-│   └── metodologia.md
-│
-└── README.md
-```
 
 ## Próximos passos
 
 - Ampliação das análises para todos os jogadores;
-- Inclusão de novas métricas e variáveis;
-- Evolução da modelagem dos dados;
-- Expansão das análises visuais no Power BI.
+
